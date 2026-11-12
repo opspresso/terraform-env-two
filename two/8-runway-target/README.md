@@ -8,7 +8,7 @@ Agent Runway 환경 `two`의 `eb` target `two-eb-amd64`가 쓰는 리소스입�
 | --- | --- |
 | ACM 인증서 `*.two.rovr.dev` | load balancer HTTPS listener(`certificateArn`). `3-domain` zone의 DNS 레코드로 검증한다 |
 | KMS `alias/agent-runway` | SecureString Variable 암호화(`secretsKeyArn`). `prevent_destroy`로 보호한다. 키를 지우면 저장한 비밀 Variable을 잃는다 |
-| module `target` | terraform-env-opsp `modules/runway-target`(commit SHA로 고정): app boundary `agent-runway-app-boundary`, deploy role `agent-runway-target-deploy`, EB 서비스 역할 `agent-runway-eb-service`, bucket `agent-runway-two-eb-amd64-552292899126`, secrets 역할 `agent-runway-target-secrets` |
+| module `runway_target` | terraform-env-opsp `modules/runway-target`(commit SHA로 고정): app boundary `agent-runway-app-boundary`, deploy role `agent-runway-target-deploy`, EB 서비스 역할 `agent-runway-eb-service`, bucket `agent-runway-two-eb-amd64-552292899126`, secrets 역할 `agent-runway-target-secrets` |
 
 두 역할은 opspresso의 역할(terraform-env-opsp `demo/7-eks-shared`)만 신뢰하고, 둘 다 Agent Runway가 만든 External ID(`sts:ExternalId`)를 요구합니다.
 

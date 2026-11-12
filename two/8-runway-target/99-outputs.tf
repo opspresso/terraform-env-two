@@ -5,7 +5,7 @@ output "account" {
   value = {
     id     = local.account_id
     region = var.region
-    access = { secretsRole = module.target.secrets_role_arn }
+    access = { secretsRole = module.runway_target.secrets_role_arn }
   }
 }
 
@@ -20,11 +20,11 @@ output "eb_target" {
       medium = { instanceTypes = { amd64 = var.amd64_instance_types[1] }, min = 1, max = 2 }
       large  = { instanceTypes = { amd64 = var.amd64_instance_types[2] }, min = 2, max = 4 }
     }
-    deployRole          = module.target.deploy_role_arn
-    artifactBucket      = module.target.artifact_bucket
+    deployRole          = module.runway_target.deploy_role_arn
+    artifactBucket      = module.runway_target.artifact_bucket
     solutionStack       = var.solution_stack
-    serviceRole         = module.target.service_role_arn
-    permissionsBoundary = module.target.permissions_boundary_arn
+    serviceRole         = module.runway_target.service_role_arn
+    permissionsBoundary = module.runway_target.permissions_boundary_arn
     vpcId               = data.terraform_remote_state.vpc.outputs.vpc_id
     instanceSubnets     = data.terraform_remote_state.vpc.outputs.private_subnets
     loadBalancerSubnets = data.terraform_remote_state.vpc.outputs.public_subnets
