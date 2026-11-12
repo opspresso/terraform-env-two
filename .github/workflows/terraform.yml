@@ -16,3 +16,26 @@ jobs:
         with:
           persist-credentials: false
       - run: ./scripts/check-layout.sh
+
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory:
+          - two/2-vpc
+          - two/3-domain
+          - two/8-runway-target
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.17.1'
+      - run: terraform fmt -check
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate
