@@ -17,7 +17,9 @@ Agent Runway 환경 `two`의 `eb` target `two-eb-amd64`가 쓰는 리소스입�
 | `agent-runway-target-deploy` | `pod-role--delivery-target`(`app-deploy-eb`·`app-remove-eb` 스텝) | session tag가 가리키는 Project 환경의 stack `runway-<project>-<env>`만 만들고 바꾼다 |
 | `agent-runway-target-secrets` | `pod-role--agent-runway`(Agent Runway) | `/agent-runway/two-eb-amd64/*` Variable을 이 계정의 KMS key로 쓰고 읽고 지운다 |
 
-앱 이미지는 opspresso ECR `projects/<slug>`에 있습니다. terraform-env-opsp `demo/8-app-delivery`의 registry policy가 이 계정의 instance 역할 `runway-*-app`의 pull을 허용합니다.
+native Java 플랫폼의 환경 secret 참조는 instance의 `ssm:GetParameter` 권한을 사용하며, 자기 환경 경로로 제한됩니다.
+
+기존 Docker 앱 이미지는 opspresso ECR `projects/<slug>`에 있습니다. terraform-env-opsp `demo/8-app-delivery`의 registry policy가 이 계정의 instance 역할 `runway-*-app`의 pull을 허용합니다.
 
 출력 `account`와 `eb_target`은 관리자가 Agent Runway 환경 `two`에 넣을 값입니다(비밀 값 없음). Agent Runway는 `account.access.externalId`를 직접 정합니다.
 
