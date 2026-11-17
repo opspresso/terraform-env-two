@@ -1,6 +1,6 @@
 # 8-runway-target
 
-Agent Runway 계정 `nalbam-two`와 그 계정의 환경 `two`(`eb` target)가 쓰는 리소스입니다. Agent Runway는 opspresso 계정(`396608815058`)의 `eks-demo`에서 실행됩니다.
+Agent Runway 계정 `nalbam-two`와 그 계정의 환경 `two`(`eb` target)이 쓰는 리소스입니다. Agent Runway는 opspresso 계정(`396608815058`)의 `eks-demo`에서 실행됩니다.
 계약은 agent-platform `docs/APP_DELIVERY.md`의 "계정"이고, 배포 workflow는 argocd-env-projects `charts/delivery/files/app-deploy-eb.yaml`·
 `app-remove-eb.yaml`·`eb-stack.yaml`입니다.
 
