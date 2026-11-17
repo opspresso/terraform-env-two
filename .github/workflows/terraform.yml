@@ -24,7 +24,6 @@ jobs:
       matrix:
         directory:
           - two/1-account
-          - two/2-vpc
           - two/3-domain
           - two/8-runway-target
     defaults:

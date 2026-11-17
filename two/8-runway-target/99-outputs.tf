@@ -25,9 +25,9 @@ output "eb_target" {
     solutionStack       = var.solution_stack
     serviceRole         = module.runway_target.service_role_arn
     permissionsBoundary = module.runway_target.permissions_boundary_arn
-    vpcId               = data.terraform_remote_state.vpc.outputs.vpc_id
-    instanceSubnets     = data.terraform_remote_state.vpc.outputs.private_subnets
-    loadBalancerSubnets = data.terraform_remote_state.vpc.outputs.public_subnets
+    vpcId               = data.aws_vpc.default.id
+    instanceSubnets     = local.subnets
+    loadBalancerSubnets = local.subnets
     certificateArn      = aws_acm_certificate_validation.apps.certificate_arn
     hostedZoneId        = local.zone_id
     secretsKeyArn       = aws_kms_key.variables.arn
