@@ -8,7 +8,7 @@ Agent Runway와 그 설치 계정 opspresso(`396608815058`)의 리소스는 [ter
 | --- | --- |
 | [1-account](two/1-account/README.md) | 계정 기본 설정: IAM account alias, S3 account public access block, EBS 기본 암호화, state bucket versioning |
 | [3-domain](two/3-domain/README.md) | public zone `two.rovr.dev`. opspresso `rovr.dev`가 위임한다 |
-| [8-runway-target](two/8-runway-target/README.md) | Agent Runway 환경 `two`의 `eb` target `two-eb-amd64`: 인증서 `*.two.rovr.dev`, Variable KMS key, deploy·secrets 역할, app boundary, EB 서비스 역할, source bundle bucket |
+| [8-runway-target](two/8-runway-target/README.md) | Agent Runway 계정 `nalbam-two`와 환경 `two`의 `eb` target: 인증서 `*.two.rovr.dev`, Variable KMS key, deploy·secrets 역할, app boundary, EB 서비스 역할, source bundle bucket |
 
 처음 적용할 때의 순서는 다음과 같습니다. opspresso 쪽 변경은 terraform-env-opsp `demo/8-app-delivery`에 있습니다.
 
