@@ -7,13 +7,12 @@ Agent Runway와 그 설치 계정 opspresso(`396608815058`)의 리소스는 [ter
 | 디렉터리 | 용도 |
 | --- | --- |
 | [1-account](two/1-account/README.md) | 계정 기본 설정: IAM account alias, S3 account public access block, EBS 기본 암호화, state bucket versioning |
-| [2-vpc](two/2-vpc/README.md) | VPC `vpc-two`: public·private subnet, NAT gateway 1개, S3 gateway endpoint |
 | [3-domain](two/3-domain/README.md) | public zone `two.rovr.dev`. opspresso `rovr.dev`가 위임한다 |
 | [8-runway-target](two/8-runway-target/README.md) | Agent Runway 환경 `two`의 `eb` target `two-eb-amd64`: 인증서 `*.two.rovr.dev`, Variable KMS key, deploy·secrets 역할, app boundary, EB 서비스 역할, source bundle bucket |
 
 처음 적용할 때의 순서는 다음과 같습니다. opspresso 쪽 변경은 terraform-env-opsp `demo/8-app-delivery`에 있습니다.
 
-1. `1-account`, 그 뒤 `2-vpc`, `3-domain`
+1. `1-account`, 그 뒤 `3-domain`
 2. terraform-env-opsp `demo/8-app-delivery`: `two.rovr.dev` NS 위임(`3-domain`의 `name_servers`)과 ECR pull 허용
 3. Agent Runway 환경 `two` 생성(External ID 발급), 그 뒤 `8-runway-target`
 4. Agent Runway 환경 `two`에 `eb` target 추가
@@ -21,7 +20,8 @@ Agent Runway와 그 설치 계정 opspresso(`396608815058`)의 리소스는 [ter
 ## 디렉터리 이름
 
 root는 `two/<NN>-<주제>`입니다. `two`는 이 계정을 쓰는 Agent Runway 환경 이름이며, terraform-env-opsp의 `demo/`(설치 `eks-demo`)와 같은 자리입니다.
-번호는 terraform-env-demo·terraform-env-opsp와 같은 의존 순서를 따릅니다: `1` 계정, `2` 네트워크, `3` DNS, `8` 서비스별 리소스. 번호가 작은 root를 먼저 적용합니다.
+번호는 terraform-env-demo·terraform-env-opsp와 같은 의존 순서를 따릅니다: `1` 계정, `3` DNS, `8` 서비스별 리소스. 번호가 작은 root를 먼저 적용합니다.
+네트워크(`2`) root는 없습니다. 이 계정은 리전의 기본 VPC를 씁니다([8-runway-target](two/8-runway-target/README.md#네트워크)).
 
 ## 준비와 실행
 

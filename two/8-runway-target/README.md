@@ -23,9 +23,21 @@ native Java 플랫폼의 환경 secret 참조는 instance의 `ssm:GetParameter` 
 
 출력 `account`와 `eb_target`은 관리자가 Agent Runway 환경 `two`에 넣을 값입니다(비밀 값 없음). Agent Runway는 `account.access.externalId`를 직접 정합니다.
 
+## 네트워크
+
+이 계정은 따로 VPC를 만들지 않고 리전 `ap-northeast-2`의 기본 VPC를 씁니다. 출력 `eb_target`의 `vpcId`는 기본 VPC이고, `instanceSubnets`와
+`loadBalancerSubnets`는 같은 값(AZ마다 하나인 기본 subnet 전부)입니다.
+
+- 기본 subnet은 public입니다. internet gateway route가 있고 NAT는 없습니다.
+- 두 subnet 목록이 같으면 배포 step이 instance에 public IP를 줍니다(argocd-env-projects `charts/delivery/files/target.sh` `public_ip`).
+  instance는 그 주소로 ECR, Elastic Beanstalk, CloudFormation, SSM, CloudWatch Logs, S3에 연결합니다.
+- instance security group은 Elastic Beanstalk이 만들고 load balancer에서 오는 요청만 받습니다. public IP로 instance에 직접 들어오는 경로는 없습니다.
+- 비용: NAT gateway가 없습니다. instance마다 public IPv4 요금(시간당 0.005 USD, 월 약 3.65 USD)이 붙습니다.
+- 기본 VPC를 지우면 이 root의 plan이 실패합니다. 다시 만들려면 `aws ec2 create-default-vpc`를 실행합니다.
+
 ## 준비
 
-- `2-vpc`, `3-domain`을 먼저 적용합니다. 이 root는 두 state를 읽습니다.
+- `1-account`, `3-domain`을 먼저 적용합니다. 이 root는 `3-domain`의 state를 읽습니다.
 - terraform-env-opsp `demo/8-app-delivery`가 `two.rovr.dev`를 위임해야 합니다. 위임이 없으면 인증서 검증이 끝나지 않습니다.
 - `runway_external_id`가 필요합니다. 값은 Agent Runway 콘솔 **관리 > 환경 > two**의 External ID입니다. 공개 저장소이므로 Git에 넣지 않고
   `TF_VAR_runway_external_id` 환경변수나 미추적 `terraform.tfvars`로 줍니다. 값이 없으면 plan이 시작하지 않습니다.
