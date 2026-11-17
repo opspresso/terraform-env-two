@@ -17,7 +17,7 @@ variable "management_account_id" {
 }
 
 variable "runway_external_id" {
-  description = "account.access.externalId of the Agent Runway environment two (Agent Runway console 관리 > 환경 > two). Agent Runway generates it; keep it out of Git."
+  description = "access.externalId of the Agent Runway account of nalbam-two (Agent Runway console 관리 > 계정). Agent Runway generates it; keep it out of Git."
   type        = string
   nullable    = false
 
@@ -28,10 +28,10 @@ variable "runway_external_id" {
   }
 }
 
-variable "target_name" {
-  description = "The name of the eb target of the Agent Runway environment two. It is also the second segment of the Variables' SSM path."
-  type        = string
-  default     = "two-eb-amd64"
+variable "environment_names" {
+  description = "The Agent Runway environments with an eb target in this account. Each name is the second segment of its Variables' SSM path."
+  type        = list(string)
+  default     = ["two"]
 }
 
 variable "solution_stack" {
