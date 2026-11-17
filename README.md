@@ -1,18 +1,19 @@
 # terraform-env-two
 
 계정 nalbam-two(`552292899126`, `ap-northeast-2`)의 AWS 리소스를 관리합니다. 이 계정은 Agent Runway 환경 `two`의 앱을 실행합니다.
-Agent Runway와 그 설치 계정 opspresso(`396608815058`)의 리소스는 [terraform-env-opsp](https://github.com/opspresso/terraform-env-opsp)가 관리합니다.
+Agent Runway와 그 설치 계정 opspresso(`396608815058`)의 리소스는 [terraform-env-opsp](https://github.com/opspresso/terraform-env-opsp)가, 조직 멤버십과 접근 포털 권한은 terraform-env-me(관리 계정 nalbam-me, private)가 관리합니다.
 `two/`의 각 디렉터리는 독립된 Terraform root입니다.
 
 | 디렉터리 | 용도 |
 | --- | --- |
+| [1-account](two/1-account/README.md) | 계정 기본 설정: IAM account alias, S3 account public access block, EBS 기본 암호화, state bucket versioning |
 | [2-vpc](two/2-vpc/README.md) | VPC `vpc-two`: public·private subnet, NAT gateway 1개, S3 gateway endpoint |
 | [3-domain](two/3-domain/README.md) | public zone `two.rovr.dev`. opspresso `rovr.dev`가 위임한다 |
 | [8-runway-target](two/8-runway-target/README.md) | Agent Runway 환경 `two`의 `eb` target `two-eb-amd64`: 인증서 `*.two.rovr.dev`, Variable KMS key, deploy·secrets 역할, app boundary, EB 서비스 역할, source bundle bucket |
 
 처음 적용할 때의 순서는 다음과 같습니다. opspresso 쪽 변경은 terraform-env-opsp `demo/8-app-delivery`에 있습니다.
 
-1. `2-vpc`, `3-domain`
+1. `1-account`, 그 뒤 `2-vpc`, `3-domain`
 2. terraform-env-opsp `demo/8-app-delivery`: `two.rovr.dev` NS 위임(`3-domain`의 `name_servers`)과 ECR pull 허용
 3. Agent Runway 환경 `two` 생성(External ID 발급), 그 뒤 `8-runway-target`
 4. Agent Runway 환경 `two`에 `eb` target 추가
@@ -20,7 +21,7 @@ Agent Runway와 그 설치 계정 opspresso(`396608815058`)의 리소스는 [ter
 ## 디렉터리 이름
 
 root는 `two/<NN>-<주제>`입니다. `two`는 이 계정을 쓰는 Agent Runway 환경 이름이며, terraform-env-opsp의 `demo/`(설치 `eks-demo`)와 같은 자리입니다.
-번호는 terraform-env-demo·terraform-env-opsp와 같은 의존 순서를 따릅니다: `2` 네트워크, `3` DNS, `8` 서비스별 리소스. 번호가 작은 root를 먼저 적용합니다.
+번호는 terraform-env-demo·terraform-env-opsp와 같은 의존 순서를 따릅니다: `1` 계정, `2` 네트워크, `3` DNS, `8` 서비스별 리소스. 번호가 작은 root를 먼저 적용합니다.
 
 ## 준비와 실행
 
@@ -40,6 +41,7 @@ terraform plan
 plan에서 예상한 변경만 있는지 확인한 뒤 `terraform apply`를 실행합니다. AWS 리소스나 데이터를 삭제하기 전에는 영향을 별도로 확인합니다.
 
 state는 이 계정의 S3 bucket `terraform-workshop-552292899126`에 `backend/two/<이름>-two/terraform.tfstate`로 저장합니다. `default` workspace를 씁니다.
+bucket은 Terraform 밖에서 만들었습니다. versioning은 `1-account`가 관리합니다.
 S3 잠금(`use_lockfile = true`)을 쓰므로 state 객체와 `.tflock` 객체를 읽고 쓰고 지울 권한이 필요합니다. backend key는 임의로 바꾸지 마세요.
 
 ## Terraform 작성 규칙
