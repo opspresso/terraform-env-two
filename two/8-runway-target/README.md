@@ -17,7 +17,7 @@ Agent Runway 계정 `nalbam-two`와 그 계정의 환경 `two`(`eb` target)이 �
 | `agent-runway-target-deploy` | `pod-role--delivery-target`(`app-deploy-eb`·`app-remove-eb` 스텝) | session tag가 가리키는 Project 환경의 stack `runway-<project>-<env>`만 만들고 바꾼다 |
 | `agent-runway-target-secrets` | `pod-role--agent-runway`(Agent Runway) | `environment_names`의 환경마다 `/agent-runway/<환경>/*` Variable을 이 계정의 KMS key로 쓰고 읽고 지운다. 접근 확인 경로 `/agent-runway/_runway/*`를 쓰고, 콘솔 선택지(VPC·subnet·인증서·hosted zone·EKS·EB 플랫폼)를 조회한다 |
 
-native Java 플랫폼의 환경 secret 참조는 instance의 `ssm:GetParameter` 권한을 사용하며, 자기 환경 경로로 제한됩니다.
+native Java 플랫폼의 환경 secret 참조는 instance의 `secretsmanager:GetSecretValue` 권한을 사용하며, 자기 환경 경로로 제한됩니다.
 
 기존 Docker 앱 이미지는 opspresso ECR `projects/<slug>`에 있습니다. terraform-env-opsp `demo/8-app-delivery`의 registry policy가 이 계정의 instance 역할 `runway-*-app`의 pull을 허용합니다.
 
@@ -30,7 +30,7 @@ native Java 플랫폼의 환경 secret 참조는 instance의 `ssm:GetParameter` 
 
 - 기본 subnet은 public입니다. internet gateway route가 있고 NAT는 없습니다.
 - 두 subnet 목록이 같으면 배포 step이 instance에 public IP를 줍니다(argocd-env-projects `charts/delivery/files/target.sh` `public_ip`).
-  instance는 그 주소로 ECR, Elastic Beanstalk, CloudFormation, SSM, CloudWatch Logs, S3에 연결합니다.
+  instance는 그 주소로 ECR, Elastic Beanstalk, CloudFormation, Secrets Manager, CloudWatch Logs, S3에 연결합니다.
 - instance security group은 Elastic Beanstalk이 만들고 load balancer에서 오는 요청만 받습니다. public IP로 instance에 직접 들어오는 경로는 없습니다.
 - 비용: NAT gateway가 없습니다. instance마다 public IPv4 요금(시간당 0.005 USD, 월 약 3.65 USD)이 붙습니다.
 - 기본 VPC를 지우면 이 root의 plan이 실패합니다. 다시 만들려면 `aws ec2 create-default-vpc`를 실행합니다.
