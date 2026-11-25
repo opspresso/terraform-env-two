@@ -29,7 +29,7 @@ variable "runway_external_id" {
 }
 
 variable "environment_names" {
-  description = "The Agent Runway environments with an eb target in this account. Each name is the second segment of its Variables' SSM path."
+  description = "The Agent Runway environments with an eb target in this account. Each name is the second segment of its Variables' Secrets Manager path."
   type        = list(string)
   default     = ["two"]
 }

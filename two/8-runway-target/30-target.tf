@@ -2,7 +2,7 @@
 # demo/8-runway-target) uses too. The opspresso roles (terraform-env-opsp demo/7-eks-shared) reach them only with Agent
 # Runway's external ID: the Workflow steps assume the deploy role, and Agent Runway assumes the secrets role.
 module "runway_target" {
-  source = "git::https://github.com/opspresso/terraform-env-opsp.git//modules/runway-target?ref=42c233d79c9d4c08181b9d343e75faed1655be2f"
+  source = "git::https://github.com/opspresso/terraform-env-opsp.git//modules/runway-target?ref=2753e5c6e47cfcb45d6cff8c96e007d94f0bf13f"
 
   target_names         = var.environment_names
   target_step_role_arn = "arn:aws:iam::${var.management_account_id}:role/pod-role--delivery-target"
